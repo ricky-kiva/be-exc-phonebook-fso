@@ -27,11 +27,21 @@ let persons = [
 ]
 
 app.get('/', (req, res) => {
-    res.send("<h1>Welcome to Phonebook App</h1><p>Visit <i><b>/api/persons</b></i> to show list of persons in our phonebook!</p>")
+    res.send(`
+        <h1>Welcome to Phonebook App</h1>
+        <p>Visit <i><b>/api/persons</b></i> to show list of persons in our phonebook!</p>
+    `)
 })
 
 app.get('/api/persons', (req, res) => {
     res.json(persons)
+})
+
+app.get('/info', (req, res) => {
+    res.send(`
+        <p>Phonebook has info for ${persons.length} people</p>
+        <p>${new Date()}</p>
+    `)
 })
 
 const PORT = 3001
