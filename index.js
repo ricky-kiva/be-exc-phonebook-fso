@@ -51,12 +51,54 @@ app.get('/api/persons/:id', (req, res) => {
     person ? res.json(person) : res.status(404).end()
 })
 
+app.post('/api/persons', (req, res) => {
+    const body = req.body
+
+    if (!body.name) {
+        return res.status(400).json({
+            "status": "error",
+            "message": "name is missing"
+        })
+    }
+
+    if (!body.number) {
+        return res.status(400).json({
+            "status": "error",
+            "message": "number is missing"
+        })
+    }
+
+    if (persons.some(p => p.name.toLowerCase() === body.name.toLowerCase())) {
+        return res.status(400).json({
+            "error": "name must be unique"
+        })
+    }
+
+    const person = {
+        name: body.name,
+        number: body.number,
+        id: generateId()
+    }
+
+    persons = persons.concat(person)
+    res.json(person)
+})
+
 app.delete('/api/persons/:id', (req, res) => {
     const id = Number(req.params.id)
     persons = persons.filter(p => p.id !== id)
 
     res.status(204).end()
 })
+
+const generateId = () => {
+    let newId
+
+    do { newId = Math.floor(Math.random() * 1000000) + 1 }
+        while (persons.some(p => p.id === newId))
+
+    return newId
+}
 
 const PORT = 3001
 app.listen(PORT, () => {
