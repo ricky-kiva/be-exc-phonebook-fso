@@ -54,14 +54,14 @@ app.get('/api/persons/:id', (req, res) => {
 app.post('/api/persons', (req, res) => {
     const body = req.body
 
-    if (!body.name) {
+    if (body.name.trim() === '') {
         return res.status(400).json({
             "status": "error",
             "message": "name is missing"
         })
     }
 
-    if (!body.number) {
+    if (body.number.trim() === '') {
         return res.status(400).json({
             "status": "error",
             "message": "number is missing"
