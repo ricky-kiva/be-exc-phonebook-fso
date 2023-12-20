@@ -30,6 +30,10 @@ app.get('/', (req, res) => {
     res.send("<h1>Welcome to Phonebook App</h1><p>Visit <i><b>/api/persons</b></i> to show list of persons in our phonebook!</p>")
 })
 
+app.get('/api/persons', (req, res) => {
+    res.json(persons)
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
