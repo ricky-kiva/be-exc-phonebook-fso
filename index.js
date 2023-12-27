@@ -15,6 +15,7 @@ const MORGAN_FORMAT = ':method :url :status :res[content-length] - :response-tim
 app.use(express.json())
 app.use(cors())
 app.use(morgan(MORGAN_FORMAT))
+app.use(express.static('dist'))
 
 let persons = [
     {
