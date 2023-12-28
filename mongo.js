@@ -34,3 +34,16 @@ if (process.argv.length === 5) {
         mongoose.connection.close()
     })
 }
+
+if (process.argv.length === 3) {
+    Person.find({}).then(result => {
+        if (result.length !== 0) {
+            console.log('phonebook:')
+            result.forEach(person => console.log(`${person.name} ${person.number}`))
+        } else {
+            console.log('Collection is empty')
+        }
+
+        mongoose.connection.close()
+    })
+}
