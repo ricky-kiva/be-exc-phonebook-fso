@@ -57,20 +57,18 @@ app.post('/api/persons', (req, res) => {
         })
     }
 
-    if (persons.some(p => p.name.toLowerCase() === body.name.toLowerCase())) {
-        return res.status(400).json({
-            "error": "name must be unique"
-        })
-    }
+    // if (persons.some(p => p.name.toLowerCase() === body.name.toLowerCase())) {
+    //     return res.status(400).json({
+    //         "error": "name must be unique"
+    //     })
+    // }
 
-    const person = {
+    const person = new Person({
         name: body.name,
         number: body.number,
-        id: generateId()
-    }
+    })
 
-    persons = persons.concat(person)
-    res.json(person)
+    person.save().then(savedPerson => res.json(savedPerson))
 })
 
 app.delete('/api/persons/:id', (req, res) => {
