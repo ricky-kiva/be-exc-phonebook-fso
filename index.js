@@ -33,11 +33,12 @@ app.get('/api/persons', (req, res) => {
     Person.find({}).then(person => res.json(person))
 })
 
-app.get('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    const person = persons.find(p => p.id === id)
-
-    person ? res.json(person) : res.status(404).end()
+app.get('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id
+    
+    Person.findById(id)
+        .then(person => person? res.json(person) : res.status(404).end())
+        .catch(error => next(error))
 })
 
 app.post('/api/persons', (req, res) => {
@@ -56,12 +57,6 @@ app.post('/api/persons', (req, res) => {
             "message": "number is missing"
         })
     }
-
-    // if (persons.some(p => p.name.toLowerCase() === body.name.toLowerCase())) {
-    //     return res.status(400).json({
-    //         "error": "name must be unique"
-    //     })
-    // }
 
     const person = new Person({
         name: body.name,
