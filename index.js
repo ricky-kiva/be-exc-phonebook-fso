@@ -71,21 +71,28 @@ app.post('/api/persons', (req, res) => {
     person.save().then(savedPerson => res.json(savedPerson))
 })
 
-app.delete('/api/persons/:id', (req, res) => {
-    const id = Number(req.params.id)
-    persons = persons.filter(p => p.id !== id)
+app.delete('/api/persons/:id', (req, res, next) => {
+    const id = req.params.id
 
-    res.status(204).end()
+    Person.findByIdAndDelete(id)
+        .then(result => res.status(204).end())
+        .catch(error => next(error))
 })
 
-const generateId = () => {
-    let newId
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message)
 
-    do { newId = Math.floor(Math.random() * 1000000) + 1 }
-        while (persons.some(p => p.id === newId))
+    if (error.name === 'CastError') { 
+        return res.status(400).send({
+            status: 'error',
+            message: 'Malformatted id'
+        })
+    }
 
-    return newId
+    next(error)
 }
+
+app.use(errorHandler)
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
