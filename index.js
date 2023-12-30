@@ -23,14 +23,16 @@ app.use(morgan(MORGAN_FORMAT))
 app.use(express.static('dist'))
 
 app.get('/info', (req, res) => {
-  res.send(`
+  Person.find({}).then(persons => {
+    res.send(`
       <p>Phonebook has info for ${persons.length} people</p>
       <p>${new Date()}</p>
   `)
+  })
 })
 
 app.get('/api/persons', (req, res) => {
-  Person.find({}).then(person => res.json(person))
+  Person.find({}).then(persons => res.json(persons))
 })
 
 app.get('/api/persons/:id', (req, res, next) => {
